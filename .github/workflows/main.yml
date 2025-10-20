@@ -21,19 +21,18 @@ jobs:
           distribution: temurin
           java-version: 17
 
-#      - name: Cache Maven dependencies
-#        uses: actions/cache@v3
-#        with:
-#            path: ~/.m2/repository
-#            key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-#            restore-keys: |
-#                  ${{ runner.os }}-maven-
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+            path: ~/.m2/repository
+            key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+            restore-keys: |
+                  ${{ runner.os }}-maven-
 
 #      tạo 2 folder chrome-linux64 và firefox
       - name: cd to resources
         working-directory: ./src/test/resources
         run: |
-          ls
           mkdir -p chrome-linux64
           ls
 
