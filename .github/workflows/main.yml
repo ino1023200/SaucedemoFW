@@ -40,8 +40,8 @@ jobs:
         working-directory: ./src/test/resources
         run: |
          touch created
-         wget -O firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
-         tar -xjf firefox.tar.bz2
+         wget -O firefox.tar.xz "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
+         tar -xJf firefox.tar.xz
          chmod +x firefox/firefox
          ls -l firefox/firefox
          ls -al
