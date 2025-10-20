@@ -12,7 +12,7 @@ import java.util.List;
 public class CartPage extends Page {
 
     // Accessing the web elements from the cart page that could be useful for the testers
-    private By cartItems = new By.ByClassName("inventory_item_name");
+    private By cartItems = new By.ByClassName("inventory_item_namea");
     private By cartItemPrice = new By.ByClassName("inventory_item_price");
     private By continueShopping = new By.ById("continue-shopping");
     private By checkout = new By.ById("checkout");
