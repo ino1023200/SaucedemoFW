@@ -91,7 +91,7 @@ jobs:
           echo "chrome_url=$CHROME_URL" >> $GITHUB_OUTPUT
           echo "firefox_url=$FIREFOX_URL" >> $GITHUB_OUTPUT
 
-      - name: Cucumber Report URLs <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+      - name: Cucumber Report URLs <------------- HERE ARE THE REPORTS
         run: |
-          echo "🔗 Chrome report: ${{ steps.extract_report.outputs.chrome_url }}"
-          echo "🔗 Firefox report: ${{ steps.extract_report.outputs.firefox_url }}"
+          echo "Chrome report: ${{ steps.extract_report.outputs.chrome_url }}"
+          echo "Firefox report: ${{ steps.extract_report.outputs.firefox_url }}"
