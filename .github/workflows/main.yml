@@ -1,0 +1,68 @@
+name: Test Workflow CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+            path: ~/.m2/repository
+            key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+            restore-keys: |
+                  ${{ runner.os }}-maven-
+                
+
+      - name: Build with Maven
+        run: mvn clean install -B
+
+      - name: check ver
+        run: mvn --version
+
+#      tạo 2 folder chrome-linux64 và firefox
+      - name: cd to resources
+        working-directory: ./src/test/resources
+        run: |
+          ls
+          mkdir -p chrome-linux64
+          ls
+
+      - name: Download and extract Firefox
+        working-directory: ./src/test/resources
+        run: |
+         touch created
+         wget -O firefox-esr.tar.bz2 "https://ftp.mozilla.org/pub/firefox/releases/115.13.0esr/linux-x86_64/en-US/firefox-115.13.0esr.tar.bz2"
+         tar -xjf firefox-esr.tar.bz2
+         ls -al
+    
+
+
+      - name: Download gecko
+        working-directory: ./src/test/resources
+        run: |
+          wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz"
+          ls
+          tar -xzf geckodriver.tar.gz
+          chmod +x geckodriver
+          ls
+
+
+      - name: Build Maven project
+        run: |
+          ls
+          mvn clean install
+
+      - name: Download geckodriver
+        run: |
+          mvn clean test -P firefox
