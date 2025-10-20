@@ -28,13 +28,35 @@ jobs:
             key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
             restore-keys: |
                   ${{ runner.os }}-maven-
+              
 
-#      tạo 2 folder chrome-linux64 và firefox
-      - name: cd to resources
+#      - name: Build with Maven
+#        run: mvn clean install -B
+
+      # tải và giải nén chrome
+      - name: Download and extract chrome
         working-directory: ./src/test/resources
         run: |
-          mkdir -p chrome-linux64
-          ls
+          wget https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.78/linux64/chrome-linux64.zip
+          unzip chrome-linux64.zip
+          chmod +x chrome-linux64/chrome
+          ls -l chrome-linux64/chrome
+          ls 
+
+      # tải và giải nén chromedriver
+      - name: Download and extract chromedriver
+        working-directory: ./src/test/resources
+        run: |
+          wget https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.78/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          mv chromedriver-linux64/chromedriver .
+          rm -rf chromedriver.zip chromedriver-linux64.zip chrome-linux64.zip chromedriver-linux64
+          ls -l chromedriver
+          ls 
+
+#      - name: Runtest chrome
+#        run: |
+#          mvn test -P chrome
 
       - name: Download and extract Firefox
         working-directory: ./src/test/resources
@@ -45,8 +67,6 @@ jobs:
          chmod +x firefox/firefox
          ls -l firefox/firefox
          ls -al
-    
-
 
       - name: Download gecko
         working-directory: ./src/test/resources
@@ -57,6 +77,21 @@ jobs:
           ls -l geckodriver
           ls
 
-      - name: Runtest Firefox
+      - name: Run tests in parallel
         run: |
-          mvn test -P firefox
+          mvn test -Pchrome > chrome.log 2>&1 &
+          mvn test -Pfirefox > firefox.log 2>&1 &
+          wait
+
+      - name: Extract Cucumber Report URLs
+        id: extract_report
+        run: |
+          CHROME_URL=$(grep -o 'https://reports.cucumber.io/reports/[a-zA-Z0-9\-]*' chrome.log)
+          FIREFOX_URL=$(grep -o 'https://reports.cucumber.io/reports/[a-zA-Z0-9\-]*' firefox.log)
+          echo "chrome_url=$CHROME_URL" >> $GITHUB_OUTPUT
+          echo "firefox_url=$FIREFOX_URL" >> $GITHUB_OUTPUT
+
+      - name: Print Cucumber Report URLs
+        run: |
+          echo "🔗 Chrome report: ${{ steps.extract_report.outputs.chrome_url }}"
+          echo "🔗 Firefox report: ${{ steps.extract_report.outputs.firefox_url }}"
