@@ -15,20 +15,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
+      - name: Set up Java
+        uses: actions/setup-java@v3
         with:
-            path: ~/.m2/repository
-            key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-            restore-keys: |
-                  ${{ runner.os }}-maven-
-                
+          distribution: temurin
+          java-version: 17
 
-      - name: Build with Maven
-        run: mvn clean install -B
-
-      - name: check ver
-        run: mvn --version
+#      - name: Cache Maven dependencies
+#        uses: actions/cache@v3
+#        with:
+#            path: ~/.m2/repository
+#            key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+#            restore-keys: |
+#                  ${{ runner.os }}-maven-
+#
+#
+#      - name: Build with Maven
+#        run: mvn clean install -B
+#
+#      - name: check ver
+#        run: mvn --version
 
 #      tạo 2 folder chrome-linux64 và firefox
       - name: cd to resources
@@ -42,8 +48,8 @@ jobs:
         working-directory: ./src/test/resources
         run: |
          touch created
-         wget -O firefox-esr.tar.bz2 "https://ftp.mozilla.org/pub/firefox/releases/115.13.0esr/linux-x86_64/en-US/firefox-115.13.0esr.tar.bz2"
-         tar -xjf firefox-esr.tar.bz2
+         wget -O firefox.tar.bz2 "https://ftp.mozilla.org/pub/firefox/releases/115.13.0esr/linux-x86_64/en-US/firefox-115.13.0esr.tar.bz2"
+         tar -xjf firefox.tar.bz2
          ls -al
     
 
@@ -51,18 +57,12 @@ jobs:
       - name: Download gecko
         working-directory: ./src/test/resources
         run: |
-          wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz"
+          wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz"
           ls
           tar -xzf geckodriver.tar.gz
           chmod +x geckodriver
           ls
 
-
-      - name: Build Maven project
+      - name: Runtest Firefox
         run: |
-          ls
-          mvn clean install
-
-      - name: Download geckodriver
-        run: |
-          mvn clean test -P firefox
+          mvn test -P firefox
