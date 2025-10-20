@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>SauceDemoFramework</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>SauceDemoFramework</name>
+    <url>http://www.example.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>7.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                </plugin>
+
+                <!-- ============= THÊM SUREFIRE PLUGIN ============= -->
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                    <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.7.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <!-- ============= PROFILES CHO MULTI-BROWSER ============= -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- ============= PROFILES ============= -->
+    <profiles>
+        <!-- Profile: Chạy Chrome -->
+        <profile>
+            <id>chrome</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <browser>chrome</browser>
+                            </systemPropertyVariables>
+                            <includes>
+                                <include>**/ChromeTestRunner.java</include>
+                            </includes>
+                            <reportsDirectory>target/surefire-reports-chrome</reportsDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile: Chạy Firefox -->
+        <profile>
+            <id>firefox</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <browser>firefox</browser>
+                            </systemPropertyVariables>
+                            <includes>
+                                <include>**/FirefoxTestRunner.java</include>
+                            </includes>
+                            <reportsDirectory>target/surefire-reports-firefox</reportsDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile: Chạy CẢ Chrome + Firefox -->
+        <profile>
+            <id>parallel-browsers</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <configuration>
+                            <!-- ========== PARALLEL CONFIGURATION ========== -->
+                            <!-- Chạy song song ở mức class -->
+                            <parallel>classes</parallel>
+
+                            <!-- Số thread = số browser muốn chạy -->
+                            <threadCount>2</threadCount>
+
+                            <!-- Fork mỗi test class vào JVM riêng -->
+                            <forkCount>2</forkCount>
+
+                            <!-- Không reuse JVM giữa các test -->
+                            <reuseForks>false</reuseForks>
+
+                            <!-- Tiếp tục test nếu có failures -->
+                            <testFailureIgnore>true</testFailureIgnore>
+
+                            <!-- Chỉ chạy 2 runner mới -->
+                            <includes>
+                                <include>**/ChromeTestRunner.java</include>
+                                <include>**/FirefoxTestRunner.java</include>
+                            </includes>
+
+                            <!-- Report directory chung -->
+                            <reportsDirectory>${project.build.directory}/surefire-reports-parallel</reportsDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
