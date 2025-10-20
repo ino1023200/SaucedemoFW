@@ -29,7 +29,6 @@ jobs:
             restore-keys: |
                   ${{ runner.os }}-maven-
 
-      # tải và giải nén chrome
       - name: Download and extract chrome
         working-directory: ./src/test/resources
         run: |
@@ -39,7 +38,6 @@ jobs:
           ls -l chrome-linux64/chrome
           ls 
 
-      # tải và giải nén chromedriver
       - name: Download and extract chromedriver
         working-directory: ./src/test/resources
         run: |
