@@ -50,6 +50,7 @@ jobs:
          touch created
          wget -O firefox.tar.bz2 "https://ftp.mozilla.org/pub/firefox/releases/115.13.0esr/linux-x86_64/en-US/firefox-115.13.0esr.tar.bz2"
          tar -xjf firefox.tar.bz2
+         chmod +x firefox/firefox
          ls -al
     
 
