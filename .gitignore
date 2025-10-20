@@ -1,0 +1,25 @@
+# Ignore build output
+/target/
+*.class
+
+# IDE files
+/.idea/
+/*.iml
+*.ipr
+*.iws
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+
+/src/test/resources/chrome-linux64/
+/src/test/resources/firefox/
+
+/src/test/resources/chromedriver
+/src/test/resources/geckodriver
