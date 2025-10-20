@@ -28,10 +28,6 @@ jobs:
             key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
             restore-keys: |
                   ${{ runner.os }}-maven-
-              
-
-#      - name: Build with Maven
-#        run: mvn clean install -B
 
       # tải và giải nén chrome
       - name: Download and extract chrome
@@ -53,10 +49,6 @@ jobs:
           rm -rf chromedriver.zip chromedriver-linux64.zip chrome-linux64.zip chromedriver-linux64
           ls -l chromedriver
           ls 
-
-#      - name: Runtest chrome
-#        run: |
-#          mvn test -P chrome
 
       - name: Download and extract Firefox
         working-directory: ./src/test/resources
