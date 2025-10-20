@@ -19,9 +19,4 @@ import org.junit.runner.RunWith;
 )
 public class ChromeTestRunner {
 
-    // Static block để set browser type
-    // Chạy trước khi JUnit khởi tạo runner
-    static {
-        System.setProperty("browser", "chrome");
-    }
 }

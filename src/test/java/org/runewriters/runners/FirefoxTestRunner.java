@@ -18,8 +18,4 @@ import org.junit.runner.RunWith;
 )
 public class FirefoxTestRunner {
 
-
-    static {
-        System.setProperty("browser", "firefox");
-    }
 }
