@@ -58,7 +58,7 @@ jobs:
          ls -l firefox/firefox
          ls -al
 
-      - name: Download gecko
+      - name: Download and extract gecko
         working-directory: ./src/test/resources
         run: |
           wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz"
